@@ -1,11 +1,14 @@
 var form = document.getElementById('addForm');
 var itemList = document.getElementById('items');
-
+var filter = document.getElementById('filter');
 // Form submit event
 form.addEventListener('submit', addItem);
 
 // Delete event
 itemList.addEventListener('click', removeItem);
+
+// Filter Event
+filter.addEventListener('keyup', filterItems);
 
 function addItem(e){
     e.preventDefault();
@@ -15,7 +18,7 @@ function addItem(e){
     // Get input value
 
     let newItem = document.getElementById('item').value;
-    console.log(newItem);
+    console.log(`newItem: ${newItem}`);
     let li = document.createElement('li');
     // Add class to li
     li.className = 'list-group-item';
@@ -43,7 +46,26 @@ function removeItem(e){
             // Se obtiene el parentElement, el cua es <li>
             let li = e.target.parentElement;
             // Se elimina el li, que es Child del itemList (nodo ul)
-            itemList.removeChild(li);
+            console.log(itemList.removeChild(li));
         }
     }
+}
+
+// Filter items
+function filterItems(e){
+    // Convert text to lowercase
+    let text = e.target.value.toLowerCase();
+    let items = itemList.getElementsByTagName('li');
+
+    // Convert items from HTMLCollection to array
+    Array.from(items).forEach(function(item){
+        var itemName = item.firstChild.textContent;
+        // Nota: indexOf buscará text en itemName. If not found returns -1
+        if(itemName.toLowerCase().indexOf(text) != -1){
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+    
 }
